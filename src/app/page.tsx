@@ -1,103 +1,138 @@
+import dynamic from 'next/dynamic';
 import Image from "next/image";
+import { Suspense } from 'react';
+import { FaPlane, FaCar, FaHotel, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt } from 'react-icons/fa';
+
+// Import AutoChangingBackground component
+const AutoChangingBackground = dynamic(() => import('@/components/AutoChangingBackground'), {
+  loading: () => <div className="absolute inset-0 bg-gray-900"></div>,
+});
+
+
+// Lazy load components
+const TestimonialSection = dynamic(() => import('@/components/TestimonialSection'), {
+  loading: () => <div className="py-20 bg-gray-100 dark:bg-gray-800"><div className="container mx-auto px-4 text-center">Loading testimonials...</div></div>,
+});
+
+const ServicesSection = dynamic(() => import('@/components/ServicesSection'), {
+  loading: () => <div className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black"><div className="container mx-auto px-4 text-center">Loading services...</div></div>,
+});
+
+const Footer = dynamic(() => import('@/components/Footer'), {
+  ssr: true
+});
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Use client-side rendering for this component
+  "use client";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  // Array of background images for auto-changing
+  const backgroundImages = [
+    "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1780&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop"
+  ];
+
+  return (
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
+      {/* Hero Section */}
+      <section className="relative h-screen">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
+        {/* Auto-changing background component */}
+        <AutoChangingBackground 
+          images={backgroundImages}
+          interval={7000} // Change image every 7 seconds
+          alt="Luxury Travel"
+        />
+        
+        <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
+          <div className="relative h-[160px] w-full max-w-[718px] mb-6">
+            <Image 
+              src="/ITINERARY IEP LARGE LOGO 718px X 160px.png"
+              alt="Redpaddle Travel and Tours Logo"
+              fill
+              className="object-contain"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          <span className="text-2xl md:text-3xl block mt-4 font-light">Luxury at Your Fingertips</span>
+          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience premium car hiring, flight booking, and hotel reservations with our elite service designed for discerning travelers.</p>
+          
+          {/* Booking Tabs */}
+          <div className="w-full max-w-5xl bg-white/10 backdrop-blur-md rounded-xl p-6 mt-8">
+            <div className="flex flex-wrap gap-2 mb-6 justify-center">
+              <button className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-full font-medium">
+                <FaPlane /> Flights
+              </button>
+              <button className="flex items-center gap-2 px-6 py-3 bg-black/30 text-white rounded-full font-medium hover:bg-white/20 transition">
+                <FaHotel /> Hotels
+              </button>
+              <button className="flex items-center gap-2 px-6 py-3 bg-black/30 text-white rounded-full font-medium hover:bg-white/20 transition">
+                <FaCar /> Cars
+              </button>
+            </div>
+            
+            {/* Flight Search Form */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white/20 rounded-lg p-4">
+                <label className="block text-sm font-medium mb-1 text-left">From</label>
+                <div className="flex items-center gap-2">
+                  <FaMapMarkerAlt />
+                  <input type="text" placeholder="City or Airport" className="bg-transparent w-full outline-none" />
+                </div>
+              </div>
+              
+              <div className="bg-white/20 rounded-lg p-4">
+                <label className="block text-sm font-medium mb-1 text-left">To</label>
+                <div className="flex items-center gap-2">
+                  <FaMapMarkerAlt />
+                  <input type="text" placeholder="City or Airport" className="bg-transparent w-full outline-none" />
+                </div>
+              </div>
+              
+              <div className="bg-white/20 rounded-lg p-4">
+                <label className="block text-sm font-medium mb-1 text-left">Dates</label>
+                <div className="flex items-center gap-2">
+                  <FaCalendarAlt />
+                  <input type="text" placeholder="Departure - Return" className="bg-transparent w-full outline-none" />
+                </div>
+              </div>
+              
+              <div className="bg-white/20 rounded-lg p-4">
+                <label className="block text-sm font-medium mb-1 text-left">Travelers</label>
+                <div className="flex items-center gap-2">
+                  <FaUserAlt />
+                  <select className="bg-transparent w-full outline-none">
+                    <option>1 Adult</option>
+                    <option>2 Adults</option>
+                    <option>3 Adults</option>
+                    <option>4+ Adults</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <button className="mt-6 bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-8 rounded-full font-bold flex items-center justify-center gap-2 w-full md:w-auto md:mx-auto hover:from-red-700 hover:to-red-800 transition shadow-lg">
+              <FaSearch /> Search Flights
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+      
+      {/* Services Section - Dynamically loaded */}
+      <Suspense fallback={<div className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black"><div className="container mx-auto px-4 text-center">Loading services...</div></div>}>
+        <ServicesSection />
+      </Suspense>
+      
+      {/* Testimonials Section - Dynamically loaded */}
+      <Suspense fallback={<div className="py-20 bg-gray-100 dark:bg-gray-800"><div className="container mx-auto px-4 text-center">Loading testimonials...</div></div>}>
+        <TestimonialSection />
+      </Suspense>
+      
+      {/* Footer is already loaded in layout.tsx */}
     </div>
   );
 }
