@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation'; // This line should be removed
 import { FaEnvelope, FaPhone, FaPlane, FaCalendar, FaUser, FaSearch, FaSignOutAlt, FaUmbrellaBeach, FaShip, FaCar, FaPlus } from 'react-icons/fa';
 
 interface Booking {
