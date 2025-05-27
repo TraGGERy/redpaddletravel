@@ -237,7 +237,7 @@ export default function PackagesPage() {
                 <FaGlobe className="text-red-600 text-2xl" />
               </div>
               <h3 className="text-xl font-bold mb-3">Exclusive Destinations</h3>
-              <p className="text-gray-600 dark:text-gray-300">Access to exclusive resorts and destinations that aren't available through standard booking channels.</p>
+              <p className="text-gray-600 dark:text-gray-300">Access to exclusive resorts and destinations that aren&apos;t available through standard booking channels.</p>
             </div>
             
             <div className="text-center p-6">

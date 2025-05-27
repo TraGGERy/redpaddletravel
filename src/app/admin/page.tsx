@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaEnvelope, FaPhone, FaPlane, FaCalendar, FaUser, FaSearch, FaSignOutAlt, FaUmbrellaBeach, FaShip, FaCar, FaPlus } from 'react-icons/fa';
 
@@ -22,8 +22,10 @@ interface Booking {
     };
   };
   createdAt: string;
-  status: 'new' | 'contacted' | 'confirmed' | 'cancelled';
+  status: BookingStatus; // Changed from string to BookingStatus type
 }
+
+type BookingStatus = 'new' | 'contacted' | 'confirmed' | 'cancelled'; // Defined BookingStatus type
 
 interface HolidayPackage {
   id: number;
@@ -85,14 +87,14 @@ export default function AdminPage() {
   const [showAddCarForm, setShowAddCarForm] = useState(false);
   const [showAddPackageForm, setShowAddPackageForm] = useState(false);
   const [showAddCruiseForm, setShowAddCruiseForm] = useState(false);
-  const router = useRouter();
+  // const router = useRouter(); // Removed unused router
 
   // Mock admin credentials - in a real app, this would be handled by a proper auth system
   const ADMIN_USERNAME = 'admin';
   const ADMIN_PASSWORD = 'admin123';
 
   // Fetch bookings from API
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => { // Wrapped in useCallback
     if (!isAuthenticated) return;
     
     setIsLoading(true);
@@ -126,10 +128,10 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isAuthenticated, username, password, statusFilter, searchTerm]); // Added dependencies for useCallback
 
   // Fetch holiday packages
-  const fetchHolidayPackages = async () => {
+  const fetchHolidayPackages = useCallback(async () => { // Wrapped in useCallback
     if (!isAuthenticated) return;
     
     setIsLoading(true);
@@ -153,10 +155,10 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isAuthenticated, username, password]); // Added dependencies for useCallback
 
   // Fetch cruise ships
-  const fetchCruiseShips = async () => {
+  const fetchCruiseShips = useCallback(async () => { // Wrapped in useCallback
     if (!isAuthenticated) return;
     
     setIsLoading(true);
@@ -180,10 +182,10 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isAuthenticated, username, password]); // Added dependencies for useCallback
 
   // Fetch car hires
-  const fetchCarHires = async () => {
+  const fetchCarHires = useCallback(async () => { // Wrapped in useCallback
     if (!isAuthenticated) return;
     
     setIsLoading(true);
@@ -207,7 +209,7 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isAuthenticated, username, password]); // Added dependencies for useCallback
 
   // Fetch data when authenticated or filters change
   useEffect(() => {
@@ -222,7 +224,7 @@ export default function AdminPage() {
         fetchCarHires();
       }
     }
-  }, [isAuthenticated, searchTerm, statusFilter, activeTab]);
+  }, [isAuthenticated, searchTerm, statusFilter, activeTab, fetchBookings, fetchCarHires, fetchCruiseShips, fetchHolidayPackages]); // Added missing dependencies
 
 
   // Filter bookings based on search term and status
@@ -408,7 +410,7 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={() => setActiveTab('cruises')}
-                className={`${activeTab === 'cruises' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300 dark:hover:text-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
+                className={`${activeTab === 'cruises' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover-gray-300 dark:hover:text-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
               >
                 <FaShip className="mr-2" />
                 Cruise Ships
@@ -607,7 +609,7 @@ export default function AdminPage() {
                           <select 
                             className="block w-full py-1 px-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:text-white"
                             value={booking.status}
-                            onChange={(e) => updateBookingStatus(booking.id, e.target.value as any)}
+                            onChange={(e) => updateBookingStatus(booking.id, e.target.value as BookingStatus)} // Used BookingStatus type
                           >
                             <option value="new">New</option>
                             <option value="contacted">Contacted</option>

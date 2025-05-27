@@ -60,8 +60,8 @@ const AddCarForm: React.FC<AddCarFormProps> = ({ onSuccess, onCancel, credential
       }
 
       onSuccess();
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while adding the car');
+    } catch (err: unknown) { // Changed type to 'unknown' as per TypeScript requirements
+      setError(err instanceof Error ? err.message : 'An error occurred while adding the car');
     } finally {
       setIsSubmitting(false);
     }

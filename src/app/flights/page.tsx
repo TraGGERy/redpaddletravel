@@ -1,9 +1,10 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from 'react';
+import { useState, useCallback } from 'react'; // Added useCallback
 import { useRouter } from 'next/navigation';
-import { FaPlane, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaExchangeAlt, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+// FaMapMarkerAlt removed from imports as it's unused
+import { FaPlane, FaSearch, FaCalendarAlt, FaExchangeAlt, FaSpinner, FaCheckCircle } from 'react-icons/fa'; 
 import AirportSelector from '@/components/AirportSelector';
 import PassengerSelector from '@/components/PassengerSelector';
 import ContactModal from '@/components/ContactModal';
@@ -22,6 +23,10 @@ export default function FlightsPage() {
     returnDate: '',
     passengers: { adults: 1, children: 0, infants: 0 }
   });
+
+  const handlePassengerSelect = useCallback((passengers: { adults: number; children: number; infants: number }) => {
+    setFlightDetails(prev => ({ ...prev, passengers }));
+  }, []); // No dependencies needed as setFlightDetails is stable
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -120,13 +125,13 @@ export default function FlightsPage() {
               <AirportSelector
                 label="From"
                 placeholder="Enter city or airport"
-                onSelect={(airport) => console.log('Selected departure:', airport)}
+                onSelect={(airport) => setFlightDetails(prev => ({ ...prev, from: airport ? airport.name : '' }))}
               />
               
               <AirportSelector
                 label="To"
                 placeholder="Enter city or airport"
-                onSelect={(airport) => console.log('Selected arrival:', airport)}
+                onSelect={(airport) => setFlightDetails(prev => ({ ...prev, to: airport ? airport.name : '' }))}
               />
               <button className="absolute left-1/2 top-1/2 -translate-x-1/2 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center border border-gray-300 dark:border-gray-600 md:block hidden">
                 <FaExchangeAlt className="text-gray-500" />
@@ -138,7 +143,12 @@ export default function FlightsPage() {
                 <label className="block text-sm font-medium mb-2">Departure Date</label>
                 <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
                   <FaCalendarAlt className="text-gray-400 mr-2" />
-                  <input type="date" className="bg-transparent w-full outline-none" />
+                  <input 
+                    type="date" 
+                    className="bg-transparent w-full outline-none" 
+                    value={flightDetails.departureDate}
+                    onChange={(e) => setFlightDetails(prev => ({ ...prev, departureDate: e.target.value }))}
+                  />
                 </div>
               </div>
               
@@ -146,12 +156,18 @@ export default function FlightsPage() {
                 <label className="block text-sm font-medium mb-2">Return Date</label>
                 <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
                   <FaCalendarAlt className="text-gray-400 mr-2" />
-                  <input type="date" className="bg-transparent w-full outline-none" />
+                  <input 
+                    type="date" 
+                    className="bg-transparent w-full outline-none" 
+                    value={flightDetails.returnDate}
+                    onChange={(e) => setFlightDetails(prev => ({ ...prev, returnDate: e.target.value }))}
+                    disabled={flightDetails.tripType === 'One Way'} // Optionally disable if one way
+                  />
                 </div>
               </div>
               
               <PassengerSelector
-                onSelect={(passengers) => console.log('Selected passengers:', passengers)}
+                onSelect={handlePassengerSelect} // Use the memoized callback
               />
             </div>
             
@@ -310,7 +326,7 @@ export default function FlightsPage() {
                 <FaPlane className="text-red-600 text-2xl" />
               </div>
               <h3 className="text-xl font-bold mb-3">Premium Airlines</h3>
-              <p className="text-gray-600 dark:text-gray-300">Access to the world's top airlines with exclusive deals and premium seating options.</p>
+              <p className="text-gray-600 dark:text-gray-300">Access to the world&apos;s top airlines with exclusive deals and premium seating options.</p>
             </div>
             
             <div className="text-center p-6">

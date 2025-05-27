@@ -219,7 +219,7 @@ export default function CruisesPage() {
                 <FaShip className="text-blue-600 text-2xl" />
               </div>
               <h3 className="text-xl font-bold mb-3">Premium Cruise Lines</h3>
-              <p className="text-gray-600 dark:text-gray-300">Access to the world's top cruise lines with exclusive deals and premium cabin options.</p>
+              <p className="text-gray-600 dark:text-gray-300">Access to the world&apos;s top cruise lines with exclusive deals and premium cabin options.</p>
             </div>
             
             <div className="text-center p-6">

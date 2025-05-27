@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaHotel, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaStar, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+// FaHotel removed as it's unused
+import { FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaStar, FaSpinner, FaCheckCircle } from 'react-icons/fa'; 
 import ContactModal from '@/components/ContactModal';
 
 export default function HotelsPage() {

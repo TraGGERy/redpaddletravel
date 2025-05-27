@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-interface Message {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-}
+// interface Message {  // Removed unused Message interface
+//   role: 'user' | 'assistant' | 'system';
+//   content: string;
+// }
 
 export async function POST(req: NextRequest) {
   try {

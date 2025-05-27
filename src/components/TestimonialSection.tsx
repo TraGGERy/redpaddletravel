@@ -27,7 +27,7 @@ const TestimonialSection = () => {
                 <p className="text-gray-500 dark:text-gray-300 text-sm">Business Executive</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">"The flight booking service was exceptional. I was able to secure a business class seat at a competitive price, and the entire process was seamless."</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;The flight booking service was exceptional. I was able to secure a business class seat at a competitive price, and the entire process was seamless.&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
@@ -52,7 +52,7 @@ const TestimonialSection = () => {
                 <p className="text-gray-500 dark:text-gray-300 text-sm">Travel Influencer</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">"I've booked luxury hotels through many platforms, but none compare to the exclusive deals and personalized service I received here."</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;I&apos;ve booked luxury hotels through many platforms, but none compare to the exclusive deals and personalized service I received here.&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
@@ -77,7 +77,7 @@ const TestimonialSection = () => {
                 <p className="text-gray-500 dark:text-gray-300 text-sm">Entrepreneur</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">"The luxury car rental service exceeded my expectations. The vehicle was immaculate, and the delivery to my hotel was right on time."</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;The luxury car rental service exceeded my expectations. The vehicle was immaculate, and the delivery to my hotel was right on time.&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>

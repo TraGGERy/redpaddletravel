@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FaSpinner } from 'react-icons/fa';
+// FaSpinner removed as it's unused
+// import { FaSpinner } from 'react-icons/fa'; 
 
 interface ContactModalProps {
   isOpen: boolean;

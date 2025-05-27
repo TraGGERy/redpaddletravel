@@ -30,13 +30,18 @@ export default function PassengerSelector({ onSelect, required = true, error }: 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Call onSelect when passengers state changes
+  useEffect(() => {
+    onSelect(passengers);
+  }, [passengers, onSelect]);
+
   const handlePassengerChange = (type: 'adults' | 'children' | 'infants', operation: 'increase' | 'decrease') => {
     setPassengers(prev => {
       const newCount = {
         ...prev,
         [type]: operation === 'increase' ? prev[type] + 1 : Math.max(type === 'adults' ? 1 : 0, prev[type] - 1)
       };
-      onSelect(newCount);
+      // onSelect(newCount); // Removed from here
       return newCount;
     });
   };

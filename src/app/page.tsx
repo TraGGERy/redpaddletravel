@@ -18,9 +18,9 @@ const ServicesSection = dynamic(() => import('@/components/ServicesSection'), {
   loading: () => <div className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black"><div className="container mx-auto px-4 text-center">Loading services...</div></div>,
 });
 
-const Footer = dynamic(() => import('@/components/Footer'), {
-  ssr: true
-});
+// const Footer = dynamic(() => import('@/components/Footer'), { // Removed unused Footer import
+//   ssr: true
+// });
 
 
 export default function Home() {

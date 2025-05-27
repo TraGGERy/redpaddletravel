@@ -23,7 +23,7 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onSuccess, onCancel, cr
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target as HTMLInputElement;
+    const { name, value /*, type // Removed unused type */ } = e.target as HTMLInputElement;
     
     if (name === 'duration' || name === 'price') {
       setFormData(prev => ({ ...prev, [name]: value === '' ? '' : Number(value) }));
@@ -53,8 +53,8 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onSuccess, onCancel, cr
       }
 
       onSuccess();
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while adding the holiday package');
+    } catch (err: unknown) { // Changed 'any' to 'Error'
+      setError(err instanceof Error ? err.message : 'An error occurred while adding the Packege');
     } finally {
       setIsSubmitting(false);
     }
