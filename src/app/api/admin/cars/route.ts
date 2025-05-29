@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET() {
   // In a real application, you would fetch car data from a database
   const cars = [
     { id: 1, make: 'Toyota', model: 'Camry', year: 2023, category: 'Sedan', pricePerDay: 50, location: 'City Center', available: true },
