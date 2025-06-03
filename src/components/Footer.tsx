@@ -52,12 +52,11 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500">© 2023 Redpaddle Travel and Tours. All rights reserved.</p>
+          <p className="text-gray-500">© 2024 Redpaddle Travel and Tours. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="#" className="text-gray-400 hover:text-white transition"><FaFacebook /></Link>
-            <Link href="#" className="text-gray-400 hover:text-white transition"><FaTwitter /></Link>
-            <Link href="#" className="text-gray-400 hover:text-white transition"><FaInstagram /></Link>
-            <Link href="#" className="text-gray-400 hover:text-white transition"><FaLinkedin /></Link>
+            <Link href="https://www.facebook.com/share/1B8vzWwNSc/" className="text-gray-400 hover:text-white transition"><FaFacebook /></Link>
+            <Link href="https://x.com/R_T_Tours?t=8qkxSY1msIpZHSTQpytJeg&s=09" className="text-gray-400 hover:text-white transition"><FaTwitter /></Link>
+            <Link href="https://www.instagram.com/redpaddle_travel_and_tours?igsh=NG1ndWljaDlqaXE3" className="text-gray-400 hover:text-white transition"><FaInstagram /></Link>
           </div>
         </div>
       </div>
