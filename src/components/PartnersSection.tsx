@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const partners = [
   { name: 'Amadeus', logo: '/partners/amadeus.svg' },
@@ -39,10 +40,11 @@ export default function PartnersSection() {
               className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div className="relative w-32 h-20">
-                <img
+                <Image
                   src={partner.logo}
                   alt={`${partner.name} logo`}
-                  className="w-full h-full object-contain"
+                  fill
+                  className="object-contain"
                 />
               </div>
               <p className="mt-4 text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
