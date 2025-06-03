@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import Image from "next/image";
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 // Import AutoChangingBackground component
@@ -46,7 +47,7 @@ export default function Home() {
         />
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
-          <div className="relative h-[160px] w-full max-w-[718px] mb-6">
+          <div className="relative h-[100px] md:h-[160px] w-full max-w-[718px] mb-4 md:mb-6 px-4 md:px-0">
             <Image 
               src="/ITINERARY IEP LARGE LOGO 718px X 160px.png"
               alt="Redpaddle Travel and Tours Logo"
@@ -55,8 +56,23 @@ export default function Home() {
               priority
             />
           </div>
-          <span className="text-2xl md:text-3xl block mt-4 font-light">Luxury at Your Fingertips</span>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience premium travel services with our elite offerings designed for discerning travelers.</p>
+          <span className="text-xl md:text-3xl block mt-2 md:mt-4 font-light px-4">Luxury at Your Fingertips</span>
+          <p className="text-base md:text-xl max-w-2xl mb-6 md:mb-10 text-gray-200 px-4">Experience premium travel services with our elite offerings designed for discerning travelers.</p>
+          
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-2 w-full px-4 sm:px-6 md:px-8 max-w-4xl mx-auto justify-center">
+            <Link href="/flights" className="px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base w-full sm:w-auto text-center">
+              Book Flights
+            </Link>
+            <Link href="/hotels" className="px-6 sm:px-8 py-3 sm:py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base w-full sm:w-auto text-center">
+              Book Hotels
+            </Link>
+            <Link href="/cars" className="px-6 sm:px-8 py-3 sm:py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base w-full sm:w-auto text-center">
+              Rent Cars
+            </Link>
+            <Link href="/cruises" className="px-6 sm:px-8 py-3 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base w-full sm:w-auto text-center">
+              Book Cruises
+            </Link>
+          </div>
         </div>
       </section>
       
