@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <g transform="translate(10, 20)">
+    <path d="M0,10 C10,0 30,0 40,10 L35,15 C27,7 13,7 5,15 Z" fill="#d71e1e"/>
+    <text x="45" y="20" font-family="Arial" font-size="18" font-weight="bold" fill="#d71e1e">Emirates</text>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <g transform="translate(10, 20)">
+    <path d="M10,10 L30,10 L20,25 Z" fill="#b22234"/>
+    <path d="M15,5 L25,5 L20,15 Z" fill="#b22234"/>
+    <text x="40" y="20" font-family="Arial" font-size="16" font-weight="bold" fill="#1a1a1a">Kenya Airways</text>
+  </g>
+</svg>

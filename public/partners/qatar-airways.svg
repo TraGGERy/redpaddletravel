@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <g transform="translate(10, 20)">
+    <path d="M0,10 Q20,-5 40,10 L35,15 Q20,2 5,15 Z" fill="#5c0632"/>
+    <text x="45" y="20" font-family="Arial" font-size="16" font-weight="bold" fill="#5c0632">Qatar Airways</text>
+  </g>
+</svg>

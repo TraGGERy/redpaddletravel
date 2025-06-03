@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <g transform="translate(10, 20)">
+    <path d="M0,10 L15,0 L40,10 L15,20 Z" fill="#ffb700"/>
+    <text x="45" y="20" font-family="Arial" font-size="18" font-weight="bold" fill="#1a1a1a">Fastjet</text>
+  </g>
+</svg>
