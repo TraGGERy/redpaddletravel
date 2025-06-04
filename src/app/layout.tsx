@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Elite Travel - Premium Car, Flight & Hotel Booking",
+  title: "Redpaddle Travel & Tours - Premium Car, Flight & Hotel Booking",
   description: "Experience luxury travel with our premium car hiring, flight booking, and hotel reservation services.",
   keywords: "luxury travel, car hire, flight booking, hotel reservation, premium travel services",
 };
