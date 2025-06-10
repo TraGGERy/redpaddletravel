@@ -37,7 +37,7 @@ export default function Footer() {
               <li className="text-gray-400">+263 718680863</li>
               <li className="text-gray-400">+263 718680867</li>
               <li className="text-gray-400">info@redpaddletravel.co.zw</li>
-              <li className="text-gray-400">redpaddlenvestments@gmail.com</li>
+              <li className="text-gray-400">Shop B2 , 160 Fife Avenue , Harare</li>
             </ul>
           </div>
           

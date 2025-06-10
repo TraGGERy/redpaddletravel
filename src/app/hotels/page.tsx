@@ -81,7 +81,8 @@ export default function HotelsPage() {
               priority
             />
           </div>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience 5-star accommodations and exclusive resorts worldwide with Redpaddle.</p>
+          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">
+          Experience low cost to premium accommodations and exclusive resorts world-wide with Redpaddle Travel and Tours.</p>
         </div>
       </section>
       

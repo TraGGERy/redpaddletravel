@@ -27,7 +27,7 @@ export default function CruisesPage() {
               priority
             />
           </div>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience luxury cruises to exotic destinations worldwide with Redpaddle.</p>
+          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience luxury cruises to exotic destinations worldwide with Redpaddle travel and tours.</p>
         </div>
       </section>
       

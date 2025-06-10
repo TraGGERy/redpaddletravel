@@ -79,9 +79,9 @@ export default function FlightsPage() {
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            Premium Flight Booking
+            Flight Booking
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience first-class and business-class flights with premium airlines worldwide.</p>
+          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience First Class , Business Class and Economy Class to all the destinations world wide.</p>
         </div>
       </section>
       

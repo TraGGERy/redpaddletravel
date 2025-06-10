@@ -6,21 +6,21 @@ import Image from 'next/image';
 const partners = [
   { name: 'Amadeus', logo: '/partners/amadeus.svg' },
   { name: 'MSC Cruise', logo: '/partners/msc-cruise.svg' },
-  { name: 'Air Zimbabwe', logo: '/partners/air-zimbabwe.svg' },
+  { name: 'Air Zimbabwe', logo: '/partners/air-zimbabwe.png' },
   { name: 'Fastjet', logo: '/partners/fastjet.svg' },
   { name: 'Airlink', logo: '/partners/airlink.svg' },
-  { name: 'Cemair', logo: '/partners/cemair.svg' },
-  { name: 'Fly Safair', logo: '/partners/fly-safair.svg' },
-  { name: 'South African Airways', logo: '/partners/south-african-airways.svg' },
-  { name: 'Air Tanzania', logo: '/partners/air-tanzania.svg' },
-  { name: 'Air Botswana', logo: '/partners/air-botswana.svg' },
-  { name: 'Air Namibia', logo: '/partners/air-namibia.svg' },
-  { name: 'Uganda Airways', logo: '/partners/uganda-airways.svg' },
-  { name: 'Rwandair', logo: '/partners/rwandair.svg' },
+  { name: 'Cemair', logo: '/partners/cemair.png' },
+  { name: 'Fly Safair', logo: '/partners/fly-safair.jpg' },
+  { name: 'South African Airways', logo: '/partners/south-african-airways.png' },
+  { name: 'Air Tanzania', logo: '/partners/air-tanzania.png' },
+  { name: 'Air Botswana', logo: '/partners/air-botswana.png' },
+  { name: 'Air Namibia', logo: '/partners/air-namibia.png' },
+  { name: 'Uganda Airways', logo: '/partners/uganda-airways.png' },
+  { name: 'Rwandair', logo: '/partners/rwandair.png' },
   { name: 'Kenya Airways', logo: '/partners/kenya-airways.svg' },
   { name: 'Ethiopian Airways', logo: '/partners/ethiopian-airways.svg' },
-  { name: 'Fly Emirates', logo: '/partners/fly-emirates.svg' },
-  { name: 'Qatar Airways', logo: '/partners/qatar-airways.svg' }
+  { name: 'Fly Emirates', logo: '/partners/fly-emirates.png' },
+  { name: 'Qatar Airways', logo: '/partners/qatar-airways.png' }
 ];
 
 export default function PartnersSection() {

@@ -56,7 +56,7 @@ export default function Home() {
               priority
             />
           </div>
-          <span className="text-xl md:text-3xl block mt-2 md:mt-4 font-light px-4">Luxury at Your Fingertips</span>
+          <span className="text-xl md:text-3xl block mt-2 md:mt-4 font-light px-4">Your travel made easy</span>
           <p className="text-base md:text-xl max-w-2xl mb-6 md:mb-10 text-gray-200 px-4">Experience premium travel services with our elite offerings designed for discerning travelers.</p>
           
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-2 w-full px-4 sm:px-6 md:px-8 max-w-4xl mx-auto justify-center">

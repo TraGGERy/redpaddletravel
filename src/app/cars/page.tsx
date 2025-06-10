@@ -73,9 +73,9 @@ export default function CarsPage() {
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            Premium Car Hiring
+            Car Hiring
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience luxury and performance with our exclusive fleet of premium vehicles.</p>
+          <p className="text-lg md:text-xl max-w-2xl mb-10 text-gray-200">Experience the low cost to luxury car hire with us anytime.</p>
         </div>
       </section>
       
