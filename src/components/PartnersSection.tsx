@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const partners = [
   { name: 'Amadeus', logo: '/partners/amadeus.svg' },
-  { name: 'MSC Cruise', logo: '/partners/msc-cruise.svg' },
+  { name: 'MSC Cruise', logo: '/partners/msc-cruises.jpg' },
   { name: 'Air Zimbabwe', logo: '/partners/air-zimbabwe.png' },
   { name: 'Fastjet', logo: '/partners/fastjet.svg' },
   { name: 'Airlink', logo: '/partners/airlink.png' },
