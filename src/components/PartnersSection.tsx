@@ -8,7 +8,7 @@ const partners = [
   { name: 'MSC Cruise', logo: '/partners/msc-cruise.svg' },
   { name: 'Air Zimbabwe', logo: '/partners/air-zimbabwe.png' },
   { name: 'Fastjet', logo: '/partners/fastjet.svg' },
-  { name: 'Airlink', logo: '/partners/airlink.svg' },
+  { name: 'Airlink', logo: '/partners/airlink.png' },
   { name: 'Cemair', logo: '/partners/cemair.png' },
   { name: 'Fly Safair', logo: '/partners/fly-safair.jpg' },
   { name: 'South African Airways', logo: '/partners/south-african-airways.png' },
