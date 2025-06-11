@@ -1,21 +1,26 @@
 import Image from "next/image";
 import { FaSuitcase, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaGlobe } from 'react-icons/fa';
+import AutoChangingBackground from '@/components/AutoChangingBackground'; // Added import
 
 export default function PackagesPage() {
+  // Array of background images for auto-changing
+  const packageImages = [
+    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop", // Beach
+    "https://images.unsplash.com/photo-1473625247510-8ceb1760943f?q=80&w=2070&auto=format&fit=crop", // Mountains
+    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop"  // Resort
+  ];
+
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       {/* Hero Section */}
       <section className="relative h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
-        <div className="absolute inset-0 overflow-hidden">
-          <Image 
-            src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
-            alt="Holiday Packages"
-            fill
-            priority
-            className="object-cover"
-          />
-        </div>
+        <AutoChangingBackground 
+          images={packageImages} 
+          alt="Holiday Packages"
+          interval={5500} // Change image every 5.5 seconds
+        />
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <div className="relative h-[120px] w-full max-w-[718px] mb-6">

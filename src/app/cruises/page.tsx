@@ -1,5 +1,13 @@
 import Image from "next/image";
 import { FaShip, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaAnchor } from 'react-icons/fa';
+import AutoChangingBackground from "@/components/AutoChangingBackground";
+
+const cruiseImages = [
+  "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=2064&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1526761122248-c31c93f8b2b9?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1599640842225-85d111c60e6b?q=80&w=1974&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop"
+];
 
 export default function CruisesPage() {
   return (
@@ -8,13 +16,7 @@ export default function CruisesPage() {
       <section className="relative h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
         <div className="absolute inset-0 overflow-hidden">
-          <Image 
-            src="https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=2064&auto=format&fit=crop"
-            alt="Luxury Cruise"
-            fill
-            priority
-            className="object-cover"
-          />
+          <AutoChangingBackground images={cruiseImages} interval={5000} />
         </div>
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">

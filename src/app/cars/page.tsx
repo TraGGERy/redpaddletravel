@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaCar, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaGasPump, FaCog, FaSpinner, FaCheckCircle } from 'react-icons/fa';
 import ContactModal from '@/components/ContactModal';
+import AutoChangingBackground from '@/components/AutoChangingBackground'; // Added import
 
 export default function CarsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +22,14 @@ export default function CarsPage() {
     dropoffDate: '',
     price: 0
   });
+
+  // Array of background images for auto-changing
+  const carImages = [
+    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop"
+  ];
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -61,15 +70,11 @@ export default function CarsPage() {
       {/* Hero Section */}
       <section className="relative h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
-        <div className="absolute inset-0 overflow-hidden">
-          <Image 
-            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop"
-            alt="Luxury Car Rental"
-            fill
-            priority
-            className="object-cover"
-          />
-        </div>
+        <AutoChangingBackground 
+          images={carImages} 
+          alt="Luxury Car Rental"
+          interval={6000} // Change image every 6 seconds
+        />
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
@@ -365,7 +370,7 @@ export default function CarsPage() {
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7A2 2 0 00-2-2H5A2 2 0 00-2 2v6A2 2 0 002 2h2m2 4h10A2 2 0 002-2v-6A2 2 0 00-2-2H9A2 2 0 00-2 2v6A2 2 0 002 2zm7-5A2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-3">Flexible Pricing</h3>
