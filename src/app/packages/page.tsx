@@ -5,10 +5,11 @@ import AutoChangingBackground from '@/components/AutoChangingBackground'; // Add
 export default function PackagesPage() {
   // Array of background images for auto-changing
   const packageImages = [
-    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop", // Beach
-    "https://images.unsplash.com/photo-1473625247510-8ceb1760943f?q=80&w=2070&auto=format&fit=crop", // Mountains
-    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop"  // Resort
+    "https://cdn.britannica.com/91/5391-050-78522514/Victoria-Falls-bridge-Zambezi-River-Zimbabwe-Zambia.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/f5/03/81/kariba-dam-wall-dec-2016.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/71/bd/af/infinity-pool.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/4d/27/8f/the-residence-zanzibar.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/78/84/94/dubai-aquarium-underwater.jpg"
   ];
 
   return (

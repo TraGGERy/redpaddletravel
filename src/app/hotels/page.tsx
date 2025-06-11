@@ -3,9 +3,20 @@
 import Image from "next/image";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import AutoChangingBackground from "@/components/AutoChangingBackground"; // Added import
 // FaHotel removed as it's unused
 import { FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaStar, FaSpinner, FaCheckCircle } from 'react-icons/fa'; 
 import ContactModal from '@/components/ContactModal';
+
+const hotelImages = [
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/4b/5f/39/caption.jpg?w=2400&h=1000&s=1&cx=1348&cy=2741&chk=v1_2b5e36e781689a157686",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/71/3e/c6/hotel-riu-palace-zanzibar.jpg?w=1400&h=-1&s=1",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/9f/00/6b/caption.jpg?w=1400&h=800&s=1",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/31/b0/02/elephants-in-the-zambezi.jpg?w=1400&h=800&s=1",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/3f/e6/67/old-drift-lodge.jpg?w=1400&h=-1&s=1",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/3f/e5/f6/old-drift-lodge.jpg?w=1400&h=-1&s=1"
+];
 
 export default function HotelsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -62,13 +73,7 @@ export default function HotelsPage() {
       <section className="relative h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
         <div className="absolute inset-0 overflow-hidden">
-          <Image 
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop"
-            alt="Luxury Hotel"
-            fill
-            priority
-            className="object-cover"
-          />
+          <AutoChangingBackground images={hotelImages} interval={5000} />
         </div>
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">

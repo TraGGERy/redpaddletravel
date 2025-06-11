@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const partners = [
-  { name: 'Amadeus', logo: '/partners/amadeus.svg' },
+  { name: 'Amadeus', logo: '/partners/amadeus.png' },
   { name: 'MSC Cruise', logo: '/partners/msc-cruises.jpg' },
   { name: 'Air Zimbabwe', logo: '/partners/air-zimbabwe.png' },
-  { name: 'Fastjet', logo: '/partners/fastjet.svg' },
+  { name: 'Fastjet', logo: '/partners/fastjet.png' },
   { name: 'Airlink', logo: '/partners/airlink.png' },
   { name: 'Cemair', logo: '/partners/cemair.png' },
   { name: 'Fly Safair', logo: '/partners/fly-safair.jpg' },
@@ -17,8 +17,8 @@ const partners = [
   { name: 'Air Namibia', logo: '/partners/air-namibia.png' },
   { name: 'Uganda Airways', logo: '/partners/uganda-airways.png' },
   { name: 'Rwandair', logo: '/partners/rwandair.png' },
-  { name: 'Kenya Airways', logo: '/partners/kenya-airways.svg' },
-  { name: 'Ethiopian Airways', logo: '/partners/ethiopian-airways.svg' },
+  { name: 'Kenya Airways', logo: '/partners/kenya.png' },
+  { name: 'Ethiopian Airways', logo: '/partners/ethiopian-airways.png' },
   { name: 'Fly Emirates', logo: '/partners/fly-emirates.png' },
   { name: 'Qatar Airways', logo: '/partners/qatar-airways.png' }
 ];

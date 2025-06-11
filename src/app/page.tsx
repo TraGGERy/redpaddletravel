@@ -28,8 +28,8 @@ export default function Home() {
   // Array of background images for auto-changing
   const backgroundImages = [
     "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/3f/e6/67/old-drift-lodge.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/3f/e5/f6/old-drift-lodge.jpg",
     "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1780&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop"
   ];
