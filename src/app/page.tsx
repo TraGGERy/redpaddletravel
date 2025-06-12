@@ -42,7 +42,7 @@ export default function Home() {
         {/* Auto-changing background component */}
         <AutoChangingBackground 
           images={backgroundImages}
-          interval={7000} // Change image every 7 seconds
+          interval={3000} // Change image every 7 seconds
           alt="Luxury Travel"
         />
         

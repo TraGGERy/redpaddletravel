@@ -20,7 +20,7 @@ export default function PackagesPage() {
         <AutoChangingBackground 
           images={packageImages} 
           alt="Holiday Packages"
-          interval={5500} // Change image every 5.5 seconds
+          interval={3000} // Change image every 5.5 seconds
         />
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">

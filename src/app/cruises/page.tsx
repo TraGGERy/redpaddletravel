@@ -18,7 +18,7 @@ export default function CruisesPage() {
         <div className="absolute inset-0 overflow-hidden">
           <AutoChangingBackground 
             images={cruiseImages} 
-            interval={5000}
+            interval={3000}
             alt="Cruise destination backgrounds"
           />
         </div>

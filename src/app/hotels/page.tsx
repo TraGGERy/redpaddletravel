@@ -73,7 +73,7 @@ export default function HotelsPage() {
       <section className="relative h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
         <div className="absolute inset-0 overflow-hidden">
-          <AutoChangingBackground images={hotelImages} interval={5000} alt="Hotel image" />
+          <AutoChangingBackground images={hotelImages} interval={3000} alt="Hotel image" />
         </div>
         
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-white text-center">
