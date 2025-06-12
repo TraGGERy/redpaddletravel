@@ -11,7 +11,7 @@ interface AutoChangingBackgroundProps {
 
 const AutoChangingBackground: React.FC<AutoChangingBackgroundProps> = ({
   images,
-  interval = 5000, // Default to 5 seconds
+  interval = 3000, // Default to 5 seconds
   alt,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
