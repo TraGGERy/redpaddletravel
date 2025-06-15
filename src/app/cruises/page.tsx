@@ -1,6 +1,10 @@
+'use client';
+
 import Image from "next/image";
+import { useState } from "react";
 import { FaShip, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaAnchor } from 'react-icons/fa';
 import AutoChangingBackground from "@/components/AutoChangingBackground";
+import BookingModal, { BookingData } from "@/components/BookingModal";
 
 const cruiseImages = [
   "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=2064&auto=format&fit=crop",
@@ -10,6 +14,69 @@ const cruiseImages = [
 ];
 
 export default function CruisesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCruise, setSelectedCruise] = useState({
+    name: "",
+    price: 0,
+    description: ""
+  });
+
+  const handleBookNow = (name: string, price: number, description: string) => {
+    setSelectedCruise({
+      name,
+      price,
+      description
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmitBooking = async (data: BookingData) => {
+    try {
+      // Prepare the data for the API
+      const bookingData = {
+        cruiseName: selectedCruise.name,
+        numberOfPeople: data.adults + data.kids,
+        departureDate: data.departureDate,
+        returnDate: data.returnDate,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        price: selectedCruise.price,
+        description: selectedCruise.description
+      };
+
+      // Send the data to the API
+      const response = await fetch('/api/bookings/cruise', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit booking');
+      }
+
+      const result = await response.json();
+      console.log("Booking submitted successfully:", result);
+      
+      // Close the modal after submission
+      setIsModalOpen(false);
+      
+      // You could also show a success message or redirect
+      alert('Booking submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      alert('Failed to submit booking. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       {/* Hero Section */}
@@ -110,106 +177,229 @@ export default function CruisesPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">Featured Cruise Deals</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Cruise Deal 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Durban Cruise */}
             <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
               <div className="h-48 overflow-hidden relative">
                 <Image 
-                  src="https://images.unsplash.com/photo-1599640842225-85d111c60e6b?q=80&w=1974&auto=format&fit=crop"
-                  alt="Caribbean Cruise"
+                  src="https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=2064&auto=format&fit=crop" // Placeholder Image
+                  alt="Cruise from Durban"
                   fill
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">Caribbean Paradise</h3>
+                  <h3 className="text-white text-xl font-bold">Cruise from Durban</h3>
                 </div>
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <div>
-                    <p className="text-gray-500 dark:text-gray-300">Royal Caribbean</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Oasis of the Seas</p>
+                    <p className="text-gray-500 dark:text-gray-300">South Africa Departures</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-blue-600">$1,299</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
+                    <p className="text-2xl font-bold text-blue-600">US$ 370.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
                   </div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>7 Nights</span>
-                  <span>Miami Departure</span>
+                  <span>Starting from 3 Nights</span>
+                  <span>Departs from Durban</span>
                 </div>
-                <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">Book Now</button>
+                <button 
+                  onClick={() => handleBookNow("Cruise from Durban", 370, "South Africa Departures - 3 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
-            
-            {/* Cruise Deal 2 */}
+
+            {/* Cape Town Cruise */}
             <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
               <div className="h-48 overflow-hidden relative">
                 <Image 
-                  src="https://images.unsplash.com/photo-1566375638485-8493998a06a2?q=80&w=2070&auto=format&fit=crop"
-                  alt="Mediterranean Cruise"
+                  src="https://images.unsplash.com/photo-1526761122248-c31c93f8b2b9?q=80&w=2070&auto=format&fit=crop" // Placeholder Image
+                  alt="Cruise from Cape Town"
                   fill
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">Mediterranean Explorer</h3>
+                  <h3 className="text-white text-xl font-bold">Cruise from Cape Town</h3>
                 </div>
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <div>
-                    <p className="text-gray-500 dark:text-gray-300">Norwegian Cruise Line</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Norwegian Epic</p>
+                    <p className="text-gray-500 dark:text-gray-300">South Africa Departures</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-blue-600">$1,599</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
+                    <p className="text-2xl font-bold text-blue-600">US$ 940.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
                   </div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>10 Nights</span>
-                  <span>Barcelona Departure</span>
+                  <span>Starting from 5 Nights</span>
+                  <span>Departs from Cape Town</span>
                 </div>
-                <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">Book Now</button>
+                <button 
+                  onClick={() => handleBookNow("Cruise from Cape Town", 940, "South Africa Departures - 5 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
-            
-            {/* Cruise Deal 3 */}
+
+            {/* Middle East Explorer */}
             <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
               <div className="h-48 overflow-hidden relative">
                 <Image 
-                  src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?q=80&w=2071&auto=format&fit=crop"
-                  alt="Alaska Cruise"
+                  src="https://images.unsplash.com/photo-1599640842225-85d111c60e6b?q=80&w=1974&auto=format&fit=crop" // Placeholder Image
+                  alt="Middle East Cruise"
                   fill
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">Alaskan Adventure</h3>
+                  <h3 className="text-white text-xl font-bold">Middle East Explorer</h3>
                 </div>
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <div>
-                    <p className="text-gray-500 dark:text-gray-300">Celebrity Cruises</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Celebrity Solstice</p>
+                    <p className="text-gray-500 dark:text-gray-300">Dubai, Doha, Bahrain, Abu Dhabi</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-blue-600">$1,849</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
+                    <p className="text-2xl font-bold text-blue-600">US$ 1,300.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
                   </div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>7 Nights</span>
-                  <span>Seattle Departure</span>
+                  <span>Starting from 7 Nights</span>
+                  <span>Multiple Departures</span>
                 </div>
-                <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">Book Now</button>
+                <button 
+                  onClick={() => handleBookNow("Middle East Explorer", 1300, "Dubai, Doha, Bahrain, Abu Dhabi - 7 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <a href="#" className="inline-block py-3 px-8 bg-white dark:bg-gray-700 text-blue-600 font-medium rounded-full shadow hover:shadow-lg transition">View All Cruise Deals</a>
+
+            {/* Greece Cruise */}
+            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
+                <Image 
+                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop" // Placeholder Image
+                  alt="Greece Cruise"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                  <h3 className="text-white text-xl font-bold">Grecian Isles Cruise</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-300">Mediterranean Gems</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-blue-600">US$ 850.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <span>Starting from 7 Nights</span>
+                  <span>Departs from Greece</span>
+                </div>
+                <button 
+                  onClick={() => handleBookNow("Grecian Isles Cruise", 850, "Mediterranean Gems - 7 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+
+            {/* Italy Cruise */}
+            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
+                <Image 
+                  src="https://images.unsplash.com/photo-1526761122248-c31c93f8b2b9?q=80&w=2070&auto=format&fit=crop" // Placeholder Image
+                  alt="Italy Cruise"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                  <h3 className="text-white text-xl font-bold">Italian Riviera Voyage</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-300">Mediterranean Classics</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-blue-600">US$ 455.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <span>Starting from 3 Nights</span>
+                  <span>Departs from Italy</span>
+                </div>
+                <button 
+                  onClick={() => handleBookNow("Italian Riviera Voyage", 455, "Mediterranean Classics - 3 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+
+            {/* Spain Cruise */}
+            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
+                <Image 
+                  src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?q=80&w=2070&auto=format&fit=crop" // Placeholder Image
+                  alt="Spain Cruise"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                  <h3 className="text-white text-xl font-bold">Spanish Coastal Journey</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-300">Iberian Adventures</p>
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400">Ship Name (Optional)</p> */}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-blue-600">US$ 800.00</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person sharing</p>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <span>Starting from 7 Nights</span>
+                  <span>Departs from Spain</span>
+                </div>
+                <button 
+                  onClick={() => handleBookNow("Spanish Coastal Journey", 800, "Iberian Adventures - 7 Nights")} 
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -258,6 +448,18 @@ export default function CruisesPage() {
           </div>
         </div>
       </section>
+      {/* BookingModal component */}
+      {isModalOpen && selectedCruise && (
+        <BookingModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitBooking}
+          bookingType="Cruise"
+          itemName={selectedCruise.name}
+          itemPrice={selectedCruise.price}
+          itemDescription={selectedCruise.description}
+        />
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { FaPlane, FaSearch, FaCalendarAlt, FaExchangeAlt, FaSpinner, FaCheckCirc
 import AirportSelector from '@/components/AirportSelector';
 import PassengerSelector from '@/components/PassengerSelector';
 import ContactModal from '@/components/ContactModal';
+import BookingModal, { BookingData } from "@/components/BookingModal";
 
 export default function FlightsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,16 @@ export default function FlightsPage() {
     returnDate: '',
     passengers: { adults: 1, children: 0, infants: 0 }
   });
+  
+  // State for flight deals booking modal
+  const [isDealModalOpen, setIsDealModalOpen] = useState(false);
+  const [selectedDeal, setSelectedDeal] = useState<{
+    from: string;
+    to: string;
+    price: number;
+    image: string;
+  } | null>(null);
+  const [dealBookingSuccess, setDealBookingSuccess] = useState(false);
 
   const handlePassengerSelect = useCallback((passengers: { adults: number; children: number; infants: number }) => {
     setFlightDetails(prev => ({ ...prev, passengers }));
@@ -59,6 +70,68 @@ export default function FlightsPage() {
       }, 3000);
     } catch (error) {
       console.error('Error:', error);
+      alert('Failed to submit booking. Please try again.');
+    }
+  };
+  
+  // Handler for opening the deal booking modal
+  const handleBookDeal = (deal: { from: string; to: string; price: number; image: string }) => {
+    setSelectedDeal(deal);
+    setIsDealModalOpen(true);
+  };
+  
+  // Handler for closing the deal booking modal
+  const handleCloseDealModal = () => {
+    setIsDealModalOpen(false);
+    setSelectedDeal(null);
+  };
+  
+  // Handler for submitting the deal booking
+  const handleDealBookingSubmit = async (data: BookingData) => {
+    try {
+      if (!selectedDeal) return;
+      
+      // Prepare the data for the API
+      const bookingData = {
+        from: selectedDeal.from,
+        to: selectedDeal.to,
+        price: selectedDeal.price,
+        departureDate: data.departureDate,
+        returnDate: data.returnDate,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        adults: data.adults,
+        kids: data.kids,
+        infants: data.infants,
+        cabinClass: 'Economy' // Default to Economy class for deals
+      };
+
+      // Send the data to the API
+      const response = await fetch('/api/bookings/flight/deals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit booking');
+      }
+
+      // Close the modal and show success message
+      setIsDealModalOpen(false);
+      setDealBookingSuccess(true);
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setDealBookingSuccess(false);
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Error submitting deal booking:', error);
       alert('Failed to submit booking. Please try again.');
     }
   };
@@ -198,7 +271,7 @@ export default function FlightsPage() {
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg flex items-center gap-3">
                   <FaCheckCircle className="text-green-500 text-2xl" />
-                  <p className="text-gray-900 dark:text-white font-medium">Our customer team will contact you shortly!</p>
+                  <p className="text-lg font-medium">Booking request sent successfully!</p>
                 </div>
               </div>
             )}
@@ -211,106 +284,86 @@ export default function FlightsPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">Featured Flight Deals</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Flight Deal 1 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-48 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1507812984078-917a274065be?q=80&w=1974&auto=format&fit=crop"
-                  alt="New York"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">New York to London</h3>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <p className="text-gray-500 dark:text-gray-300">Business Class</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">British Airways</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+              [
+                // Harare Departures
+                { from: "Harare", to: "Johannesburg", price: 295.00, image: "https://a.travel-assets.com/findyours-php/viewfinder/images/res70/481000/481987-Doha-And-Vicinity.jpg" },
+                { from: "Harare", to: "Lusaka", price: 250.00, image: "https://content.r9cdn.net/rimg/dimg/e1/6e/f59cbe52-city-1557-1661ba47712.jpg" },
+                { from: "Harare", to: "Cape Town", price: 450.00, image: "https://cdn.audleytravel.com/3959/2826/79/1029099-cape-town.jpg" },
+                { from: "Harare", to: "Zanzibar", price: 395.00, image: "https://images.unsplash.com/photo-1586500036706-41963de24d8b?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Victoria Falls", price: 290.00, image: "https://cdn.britannica.com/91/5391-050-78522514/Victoria-Falls-bridge-Zambezi-River-Zimbabwe-Zambia.jpg" },
+                { from: "Harare", to: "London", price: 980.00, image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "New York", price: 1150.00, image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Mauritius", price: 820.00, image: "https://images.unsplash.com/photo-1524222717473-730000096953?q=80&w=1974&auto=format&fit=cro" },
+                { from: "Harare", to: "Washington DC", price: 1470.00, image: "https://images.unsplash.com/photo-1501466044931-62695aada8e9?q=80&w=1974&auto=format&fit=crop" },
+                { from: "Harare", to: "Mumbai", price: 490.00, image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "New Delhi", price: 810.00, image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Dar es Salaam", price: 350.00, image: "https://images.unsplash.com/photo-1572431447238-425af66a273b?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Dubai", price: 630.00, image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Bulawayo", price: 320.00, image: "https://images.unsplash.com/photo-1627895513036-91323d93106e?q=80&w=1932&auto=format&fit=crop" }, // Placeholder for Bulawayo
+                { from: "Harare", to: "Warsaw", price: 1180.00, image: "https://images.unsplash.com/photo-1571183907558-8230ea40a61c?q=80&w=1964&auto=format&fit=crop" },
+                { from: "Harare", to: "Durban", price: 420.00, image: "https://images.unsplash.com/photo-1577985051167-16c4f3a7d134?q=80&w=1974&auto=format&fit=crop" },
+                { from: "Harare", to: "Windhoek", price: 480.00, image: "https://images.unsplash.com/photo-1549030191-7e107f7079b2?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Lilongwe", price: 495.00, image: "https://images.unsplash.com/photo-1604928058705-809050079185?q=80&w=2070&auto=format&fit=crop" }, // Placeholder for Lilongwe
+                { from: "Harare", to: "Lagos", price: 850.00, image: "https://images.unsplash.com/photo-1587730708983-90a4517005ba?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Harare", to: "Doha", price: 820.00, image: "https://a.travel-assets.com/findyours-php/viewfinder/images/res70/481000/481987-Doha-And-Vicinity.jpg" },
+                { from: "Harare", to: "Paris", price: 1210.00, image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop" },
+                { from: "Harare", to: "Kuala Lumpur", price: 1500.00, image: "https://images.unsplash.com/photo-1585770810061-8ef4a9e5303f?q=80&w=2070&auto=format&fit=crop" },
+                // Johannesburg Departures
+                { from: "Johannesburg", to: "Cape Town", price: 180.00, image: "https://images.unsplash.com/photo-1576487248900-7a88f7cf2098?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Victoria Falls", price: 295.00, image: "https://images.unsplash.com/photo-1562004757-964059a1ba94?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Durban", price: 150.00, image: "https://images.unsplash.com/photo-1577985051167-16c4f3a7d134?q=80&w=1974&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Paris", price: 750.00, image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "London", price: 670.00, image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Washington DC", price: 900.00, image: "https://images.unsplash.com/photo-1501466044931-62695aada8e9?q=80&w=1974&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Lagos", price: 600.00, image: "https://images.unsplash.com/photo-1587730708983-90a4517005ba?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Kuala Lumpur", price: 800.00, image: "https://images.unsplash.com/photo-1585770810061-8ef4a9e5303f?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Mauritius", price: 630.00, image: "https://images.unsplash.com/photo-1542042161784-26ab9e041684?q=80&w=1964&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "New Delhi", price: 695.00, image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "New York", price: 900.00, image: "https://images.unsplash.com/photo-1496442226696-b4d98880189a?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Johannesburg", to: "Dubai", price: 595.00, image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop" },
+                // Victoria Falls Departures
+                { from: "Victoria Falls", to: "Dubai", price: 800.00, image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "London", price: 1225.00, image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "New York", price: 1335.00, image: "https://images.unsplash.com/photo-1496442226696-b4d98880189a?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "New Delhi", price: 1125.00, image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "Paris", price: 1290.00, image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "Johannesburg", price: 280.00, image: "https://images.unsplash.com/photo-1568402734099-3a075934a21e?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "Cape Town", price: 435.00, image: "https://images.unsplash.com/photo-1576487248900-7a88f7cf2098?q=80&w=2070&auto=format&fit=crop" },
+                { from: "Victoria Falls", to: "Windhoek", price: 430.00, image: "https://images.unsplash.com/photo-1549030191-7e107f7079b2?q=80&w=2070&auto=format&fit=crop" },
+              ].map((deal, index) => (
+                <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105">
+                  <div className="h-48 overflow-hidden relative">
+                    <Image 
+                      src={deal.image} // Placeholder Image
+                      alt={`Flight from ${deal.from} to ${deal.to}`}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                      <h3 className="text-white text-xl font-bold">{deal.from} to {deal.to}</h3>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-red-600">$2,450</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Round Trip</p>
-                  </div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>Dec 10 - Dec 20</span>
-                  <span>Direct Flight</span>
-                </div>
-                <button className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition">Book Now</button>
-              </div>
-            </div>
-            
-            {/* Flight Deal 2 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-48 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1543832923-44667a44c804?q=80&w=2044&auto=format&fit=crop"
-                  alt="Paris"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">Los Angeles to Paris</h3>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <p className="text-gray-500 dark:text-gray-300">First Class</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Air France</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-red-600">$3,200</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Round Trip</p>
-                  </div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>Jan 15 - Jan 25</span>
-                  <span>Direct Flight</span>
-                </div>
-                <button className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition">Book Now</button>
-              </div>
-            </div>
-            
-            {/* Flight Deal 3 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-48 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?q=80&w=1933&auto=format&fit=crop"
-                  alt="Tokyo"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="text-white text-xl font-bold">San Francisco to Tokyo</h3>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <p className="text-gray-500 dark:text-gray-300">Business Class</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Japan Airlines</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-red-600">$2,850</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Round Trip</p>
+                  <div className="p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-300">Return Ticket</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Per Person</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-red-600">US$ {deal.price.toFixed(2)}</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => handleBookDeal(deal)}
+                      className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition flex items-center justify-center gap-2"
+                    >
+                      <FaPlane /> Book Now
+                    </button>
                   </div>
                 </div>
-                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>Feb 5 - Feb 15</span>
-                  <span>Direct Flight</span>
-                </div>
-                <button className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition">Book Now</button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <a href="#" className="inline-block py-3 px-8 bg-white dark:bg-gray-700 text-red-600 font-medium rounded-full shadow hover:shadow-lg transition">View All Flight Deals</a>
+              ))}
           </div>
         </div>
       </section>
@@ -361,6 +414,29 @@ export default function FlightsPage() {
           </div>
         </div>
       </section>
+      
+      {/* Booking Modal for Flight Deals */}
+      {isDealModalOpen && selectedDeal && (
+        <BookingModal
+          isOpen={isDealModalOpen}
+          onClose={handleCloseDealModal}
+          onSubmit={handleDealBookingSubmit}
+          bookingType="Flight"
+          itemName={`${selectedDeal.from} to ${selectedDeal.to}`}
+          itemPrice={selectedDeal.price}
+          itemDescription={`Flight from ${selectedDeal.from} to ${selectedDeal.to}`}
+        />
+      )}
+      
+      {/* Deal Booking Success Message */}
+      {dealBookingSuccess && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg flex items-center gap-3">
+            <FaCheckCircle className="text-green-500 text-2xl" />
+            <p className="text-lg font-medium">Flight deal booking request sent successfully!</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
