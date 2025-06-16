@@ -52,6 +52,7 @@ export async function POST(request: Request) {
       bookingType: BookingType.FLIGHT,
       email: email,
       phone: phone,
+      name: fullName,
       status: 'pending',
       price: price.toString(),
       

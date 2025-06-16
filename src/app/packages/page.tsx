@@ -17,9 +17,18 @@ export default function PackagesPage() {
   ];
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<any>(null);
+  interface PackageDetails {
+    name: string;
+    price: number;
+    description: string;
+    details: string;
+    duration: number;
+    image: string;
+  }
 
-  const handleBookNowClick = (packageDetails: any) => {
+  const [selectedPackage, setSelectedPackage] = useState<PackageDetails | null>(null);
+
+  const handleBookNowClick = (packageDetails: PackageDetails) => {
     setSelectedPackage(packageDetails);
     setIsBookingModalOpen(true);
   };
@@ -282,7 +291,10 @@ export default function PackagesPage() {
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-1"><FaGlobe className="inline mr-2" />{pkg.details}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-4"><FaCalendarAlt className="inline mr-2" />{pkg.duration}</p>
                   <button 
-                    onClick={() => handleBookNowClick(pkg)}
+                    onClick={() => handleBookNowClick({
+                      ...pkg,
+                      duration: parseInt(pkg.duration.split('-')[0]) // Convert duration string to number using first value
+                    })}
                     className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition shadow-md"
                   >
                     Book Now

@@ -44,6 +44,7 @@ export async function POST(request: Request) {
       bookingType: BookingType.PACKAGE, // Using the enum for type safety
       email: email,
       phone: phone,
+      name: name,
       status: 'pending', // Default status
       price: calculatedPrice.toString(), // Ensure price is a string if your decimal type expects it
       

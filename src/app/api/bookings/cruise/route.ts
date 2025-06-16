@@ -43,11 +43,14 @@ export async function POST(request: Request) {
       bookingType: BookingType.CRUISE,
       email: email,
       phone: phone,
+      name: fullName,
       status: 'pending',
       price: price ? price.toString() : undefined,
       
       // Cruise specific fields
       cruiseName: cruiseName,
+      // Store description in a notes field or similar if needed
+      // If there's no appropriate field in the schema, we can ignore it or add a custom field
       passengerCount: numberOfPeople,
       
       // Dates

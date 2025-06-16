@@ -6,6 +6,7 @@ export const bookings = pgTable('bookings', {
   id: serial('id').primaryKey(),
   email: varchar('email', { length: 255 }).notNull(),
   phone: varchar('phone', { length: 50 }).notNull(),
+  name: varchar('name', { length: 255 }),
   
   // Common fields
   bookingType: varchar('booking_type', { length: 50 }).notNull().default('flight'), // 'flight', 'car', 'hotel', 'package', 'cruise'
