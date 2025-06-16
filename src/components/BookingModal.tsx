@@ -106,19 +106,19 @@ export default function BookingModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-lg mx-auto my-8">
-        <h3 className="text-2xl font-bold mb-2">Book {bookingType}: {itemName}</h3>
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-2 sm:p-4 overflow-y-auto h-full">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-auto my-4 sm:my-8 max-h-[90vh] overflow-y-auto">
+        <h3 className="text-xl sm:text-2xl font-bold mb-2">Book {bookingType}: {itemName}</h3>
         {itemPrice && (
-          <p className="text-lg font-semibold text-blue-600 mb-2">Price: US$ {itemPrice.toFixed(2)}</p>
+          <p className="text-base sm:text-lg font-semibold text-blue-600 mb-2">Price: US$ {itemPrice.toFixed(2)}</p>
         )}
         {itemDescription && (
-          <p className="text-gray-600 dark:text-gray-300 mb-4">{itemDescription}</p>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4">{itemDescription}</p>
         )}
-        <p className="text-gray-600 dark:text-gray-300 mb-6">Please fill in your details to proceed with the booking.</p>
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4 sm:mb-6">Please fill in your details to proceed with the booking.</p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className={`grid gap-4 ${showInfants ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="adults">Adults (12+)</label>
               <input
@@ -145,7 +145,7 @@ export default function BookingModal({
               />
             </div>
             {showInfants && (
-              <div>
+              <div className="sm:col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium mb-1" htmlFor="infants">Infants (Under 2)</label>
                 <input
                   type="number"
@@ -159,7 +159,7 @@ export default function BookingModal({
             )}
           </div>
 
-          <div className={`grid gap-4 ${requiresReturnDate ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="departureDate">
                 {bookingType === 'Cruise' ? 'Cruise Date' : 'Departure Date'}
@@ -233,17 +233,17 @@ export default function BookingModal({
             <p className="text-red-500 text-sm">Please fill in all required fields correctly.</p>
           )}
           
-          <div className="flex justify-end gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
+              className="w-full sm:w-auto px-4 py-3 sm:py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-center"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-medium hover:from-red-700 hover:to-red-800 transition shadow-md"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-medium hover:from-red-700 hover:to-red-800 transition shadow-md text-center"
             >
               Submit Booking
             </button>
