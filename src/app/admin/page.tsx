@@ -138,7 +138,7 @@ export default function AdminPage() {
         throw new Error('Failed to fetch bookings');
       }
 
-      let data = await response.json();
+      const data = await response.json();
       // Sort bookings by createdAt in descending order (latest first)
       data.sort((a: Booking, b: Booking) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
@@ -150,7 +150,7 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, username, password, statusFilter, searchTerm]); // Added dependencies for useCallback
+  }, [isAuthenticated, username, password]); // Removed statusFilter and searchTerm
 
   // Fetch holiday packages
   const fetchHolidayPackages = useCallback(async () => { // Wrapped in useCallback
