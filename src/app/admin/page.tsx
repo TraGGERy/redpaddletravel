@@ -604,78 +604,52 @@ export default function AdminPage() {
                           </div>
                           {booking.bookingType === 'flight' && (
                             <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Route:</span> {booking.fromLocation} → {booking.toLocation}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Trip:</span> {booking.tripType}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Class:</span> {booking.cabinClass}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Departure:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              {booking.returnDate && (
-                                <div>
-                                  <span className="font-semibold text-gray-700 dark:text-gray-300">Return:</span> {new Date(booking.returnDate).toLocaleDateString()}
-                                </div>
-                              )}
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Passengers:</span> {booking.passengerCount ? `${booking.passengerCount} Adult${booking.passengerCount !== 1 ? 's' : ''}` : 'N/A'}
-                              </div>
+                              {booking.fromLocation && booking.toLocation && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Route:</span> {booking.fromLocation} → {booking.toLocation}</div>}
+                              {booking.tripType && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Trip:</span> {booking.tripType}</div>}
+                              {booking.cabinClass && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Class:</span> {booking.cabinClass}</div>}
+                              {booking.departureDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Departure:</span> {new Date(booking.departureDate).toLocaleDateString()}</div>}
+                              {booking.returnDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Return:</span> {new Date(booking.returnDate).toLocaleDateString()}</div>}
+                              {booking.passengerCount != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Passengers:</span> {booking.passengerCount} Adult{booking.passengerCount !== 1 ? 's' : ''}</div>}
                             </div>
                           )}
                           {booking.bookingType === 'car' && (
                             <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Vehicle:</span> {booking.carMake} {booking.carModel}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Category:</span> {booking.carCategory}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Pickup:</span> {booking.pickupLocation}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff:</span> {booking.dropoffLocation}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Pickup Date:</span> {booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff Date:</span> {booking.dropoffDate ? new Date(booking.dropoffDate).toLocaleDateString() : 'N/A'}
-                              </div>
+                              {(booking.carMake || booking.carModel) && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Vehicle:</span> {booking.carMake} {booking.carModel}</div>}
+                              {booking.carCategory && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Category:</span> {booking.carCategory}</div>}
+                              {booking.pickupLocation && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Pickup:</span> {booking.pickupLocation}</div>}
+                              {booking.dropoffLocation && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff:</span> {booking.dropoffLocation}</div>}
+                              {booking.pickupDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Pickup Date:</span> {new Date(booking.pickupDate).toLocaleDateString()}</div>}
+                              {booking.dropoffDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff Date:</span> {new Date(booking.dropoffDate).toLocaleDateString()}</div>}
                             </div>
                           )}
                           {booking.bookingType === 'hotel' && (
                             <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Hotel:</span> {booking.hotelName}</div>
+                              {booking.hotelName && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Hotel:</span> {booking.hotelName}</div>}
                               {booking.destination && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Location:</span> {booking.destination}</div>}
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Room:</span> {booking.roomType}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Check-in:</span> {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Check-out:</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.guestCount ? `${booking.guestCount} Guest${booking.guestCount !== 1 ? 's' : ''}` : 'N/A'}
-                              </div>
+                              {booking.roomType && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Room:</span> {booking.roomType}</div>}
+                              {booking.checkInDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Check-in:</span> {new Date(booking.checkInDate).toLocaleDateString()}</div>}
+                              {booking.checkOutDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Check-out:</span> {new Date(booking.checkOutDate).toLocaleDateString()}</div>}
+                              {booking.guestCount != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.guestCount} Guest{booking.guestCount !== 1 ? 's' : ''}</div>}
                             </div>
                           )}
                           {booking.bookingType === 'package' && (
                             <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Package:</span> {booking.packageName}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Destination:</span> {booking.destination}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Start Date:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.packageDuration} Day{booking.packageDuration !== 1 ? 's' : ''}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Participants:</span> {booking.passengerCount ? `${booking.passengerCount} Participant${booking.passengerCount !== 1 ? 's' : ''}` : 'N/A'}
-                              </div>
+                              {booking.packageName && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Package:</span> {booking.packageName}</div>}
+                              {booking.destination && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Destination:</span> {booking.destination}</div>}
+                              {booking.departureDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Start Date:</span> {new Date(booking.departureDate).toLocaleDateString()}</div>}
+                              {booking.packageDuration != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.packageDuration} Day{booking.packageDuration !== 1 ? 's' : ''}</div>}
+                              {booking.passengerCount != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Participants:</span> {booking.passengerCount} Participant{booking.passengerCount !== 1 ? 's' : ''}</div>}
                             </div>
                           )}
                           {booking.bookingType === 'cruise' && (
                             <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cruise:</span> {booking.cruiseName}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Company:</span> {booking.cruiseCompany}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Departure Port:</span> {booking.departurePort}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Departure Date:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
-                              </div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.cruiseDuration} Day{booking.cruiseDuration !== 1 ? 's' : ''}</div>
-                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cabin:</span> {booking.cabinClass}</div>
-                              <div>
-                                <span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.passengerCount} Guest{booking.passengerCount !== 1 ? 's' : ''}
-                              </div>
+                              {booking.cruiseName && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cruise:</span> {booking.cruiseName}</div>}
+                              {booking.cruiseCompany && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Company:</span> {booking.cruiseCompany}</div>}
+                              {booking.departurePort && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Departure Port:</span> {booking.departurePort}</div>}
+                              {booking.departureDate && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Departure Date:</span> {new Date(booking.departureDate).toLocaleDateString()}</div>}
+                              {booking.cruiseDuration != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.cruiseDuration} Day{booking.cruiseDuration !== 1 ? 's' : ''}</div>}
+                              {booking.cabinClass && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cabin:</span> {booking.cabinClass}</div>}
+                              {booking.passengerCount != null && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.passengerCount} Guest{booking.passengerCount !== 1 ? 's' : ''}</div>}
                             </div>
                           )}
                         </td>
