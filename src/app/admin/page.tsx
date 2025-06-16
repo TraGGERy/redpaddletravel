@@ -5,27 +5,55 @@ import { useState, useEffect, useCallback } from 'react';
 import { FaEnvelope, FaPhone, FaPlane, FaCalendar, FaUser, FaSearch, FaSignOutAlt, FaUmbrellaBeach, FaShip, FaCar, FaPlus } from 'react-icons/fa';
 
 interface Booking {
-  id: string;
+  id: string; // or number, depending on your schema
   email: string;
   phone: string;
-  flightDetails: {
-    tripType: string;
-    cabinClass: string;
-    from: string;
-    to: string;
-    departureDate: string;
-    returnDate?: string;
-    passengers: {
-      adults: number;
-      children: number;
-      infants: number;
-    };
-  };
-  createdAt: string;
-  status: BookingStatus; // Changed from string to BookingStatus type
+  name?: string;
+  bookingType: 'flight' | 'car' | 'hotel' | 'package' | 'cruise';
+  status: BookingStatus;
+  price?: number; // or string, depending on schema type
+
+  // Flight specific fields (optional)
+  tripType?: string;
+  cabinClass?: string;
+  fromLocation?: string;
+  toLocation?: string;
+  departureDate?: string; // or Date
+  returnDate?: string; // or Date
+  passengerCount?: number;
+
+  // Car hire specific fields (optional)
+  carMake?: string;
+  carModel?: string;
+  carCategory?: string;
+  pickupLocation?: string;
+  dropoffLocation?: string;
+  pickupDate?: string; // or Date
+  dropoffDate?: string; // or Date
+
+  // Hotel specific fields (optional)
+  hotelName?: string;
+  roomType?: string;
+  checkInDate?: string; // or Date
+  checkOutDate?: string; // or Date
+  guestCount?: number;
+
+  // Holiday package specific fields (optional)
+  packageName?: string;
+  destination?: string;
+  packageDuration?: number;
+
+  // Cruise specific fields (optional)
+  cruiseName?: string;
+  cruiseCompany?: string;
+  departurePort?: string;
+  cruiseDuration?: number;
+
+  createdAt: string; // or Date
+  updatedAt?: string; // or Date
 }
 
-type BookingStatus = 'new' | 'contacted' | 'confirmed' | 'cancelled'; // Defined BookingStatus type
+type BookingStatus = 'pending' | 'new' | 'contacted' | 'confirmed' | 'cancelled'; // Expanded BookingStatus type
 
 interface HolidayPackage {
   id: number;
@@ -94,34 +122,28 @@ export default function AdminPage() {
   const ADMIN_PASSWORD = 'admin123';
 
   // Fetch bookings from API
-  const fetchBookings = useCallback(async () => { // Wrapped in useCallback
+  const fetchBookings = useCallback(async () => {
     if (!isAuthenticated) return;
-    
+
     setIsLoading(true);
     try {
-      // Create basic auth header
       const credentials = btoa(`${username}:${password}`);
-      
-      // Build URL with filters
-      let url = '/api/admin/bookings';
-      const params = new URLSearchParams();
-      if (statusFilter !== 'all') params.append('status', statusFilter);
-      if (searchTerm) params.append('search', searchTerm);
-      if (params.toString()) url += `?${params.toString()}`;
-      
-      const response = await fetch(url, {
+      const response = await fetch(`/api/admin/bookings?type=all`, {
         headers: {
           'Authorization': `Basic ${credentials}`
         }
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch bookings');
       }
+
+      let data = await response.json();
+      // Sort bookings by createdAt in descending order (latest first)
+      data.sort((a: Booking, b: Booking) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      const data = await response.json();
       setBookings(data);
-      setFilteredBookings(data);
+      setFilteredBookings(data); // Also set the sorted data to filteredBookings initially
     } catch (error) {
       console.error('Error fetching bookings:', error);
       setError('Failed to load bookings. Please try again.');
@@ -238,8 +260,8 @@ export default function AdminPage() {
         filtered = filtered.filter(booking => 
           booking.email.toLowerCase().includes(term) ||
           booking.phone.includes(term) ||
-          booking.flightDetails.from.toLowerCase().includes(term) ||
-          booking.flightDetails.to.toLowerCase().includes(term)
+          (booking.fromLocation && booking.fromLocation.toLowerCase().includes(term)) ||
+          (booking.toLocation && booking.toLocation.toLowerCase().includes(term))
         );
       }
       
@@ -304,8 +326,8 @@ export default function AdminPage() {
         filtered = filtered.filter(booking => 
           booking.email.toLowerCase().includes(term) ||
           booking.phone.includes(term) ||
-          booking.flightDetails.from.toLowerCase().includes(term) ||
-          booking.flightDetails.to.toLowerCase().includes(term)
+          (booking.fromLocation && booking.fromLocation.toLowerCase().includes(term)) ||
+          (booking.toLocation && booking.toLocation.toLowerCase().includes(term))
         );
       }
       setFilteredBookings(filtered);
@@ -399,7 +421,7 @@ export default function AdminPage() {
                 className={`${activeTab === 'bookings' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300 dark:hover:text-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center`}
               >
                 <FaPlane className="mr-2" />
-                Flight Bookings
+                All Bookings
               </button>
               <button
                 onClick={() => setActiveTab('packages')}
@@ -514,7 +536,7 @@ export default function AdminPage() {
           <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
             <div className="px-4 py-5 border-b border-gray-200 dark:border-gray-700 sm:px-6">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4 md:mb-0">Flight Booking Requests</h3>
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4 md:mb-0">All Booking Requests</h3>
                 
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                   <div className="relative">
@@ -555,7 +577,7 @@ export default function AdminPage() {
                 <thead className="bg-gray-50 dark:bg-gray-900">
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contact Info</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Flight Details</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Booking Details</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date Submitted</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
@@ -577,19 +599,85 @@ export default function AdminPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900 dark:text-white">{booking.flightDetails.from} → {booking.flightDetails.to}</div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {booking.flightDetails.tripType} • {booking.flightDetails.cabinClass}
+                          <div className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+                            {booking.bookingType.charAt(0).toUpperCase() + booking.bookingType.slice(1)}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {new Date(booking.flightDetails.departureDate).toLocaleDateString()}
-                            {booking.flightDetails.returnDate && ` - ${new Date(booking.flightDetails.returnDate).toLocaleDateString()}`}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {booking.flightDetails.passengers.adults} Adult{booking.flightDetails.passengers.adults !== 1 ? 's' : ''}
-                            {booking.flightDetails.passengers.children > 0 && `, ${booking.flightDetails.passengers.children} Child${booking.flightDetails.passengers.children !== 1 ? 'ren' : ''}`}
-                            {booking.flightDetails.passengers.infants > 0 && `, ${booking.flightDetails.passengers.infants} Infant${booking.flightDetails.passengers.infants !== 1 ? 's' : ''}`}
-                          </div>
+                          {booking.bookingType === 'flight' && (
+                            <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Route:</span> {booking.fromLocation} → {booking.toLocation}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Trip:</span> {booking.tripType}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Class:</span> {booking.cabinClass}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Departure:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              {booking.returnDate && (
+                                <div>
+                                  <span className="font-semibold text-gray-700 dark:text-gray-300">Return:</span> {new Date(booking.returnDate).toLocaleDateString()}
+                                </div>
+                              )}
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Passengers:</span> {booking.passengerCount ? `${booking.passengerCount} Adult${booking.passengerCount !== 1 ? 's' : ''}` : 'N/A'}
+                              </div>
+                            </div>
+                          )}
+                          {booking.bookingType === 'car' && (
+                            <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Vehicle:</span> {booking.carMake} {booking.carModel}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Category:</span> {booking.carCategory}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Pickup:</span> {booking.pickupLocation}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff:</span> {booking.dropoffLocation}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Pickup Date:</span> {booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Dropoff Date:</span> {booking.dropoffDate ? new Date(booking.dropoffDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                            </div>
+                          )}
+                          {booking.bookingType === 'hotel' && (
+                            <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Hotel:</span> {booking.hotelName}</div>
+                              {booking.destination && <div><span className="font-semibold text-gray-700 dark:text-gray-300">Location:</span> {booking.destination}</div>}
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Room:</span> {booking.roomType}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Check-in:</span> {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Check-out:</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.guestCount ? `${booking.guestCount} Guest${booking.guestCount !== 1 ? 's' : ''}` : 'N/A'}
+                              </div>
+                            </div>
+                          )}
+                          {booking.bookingType === 'package' && (
+                            <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Package:</span> {booking.packageName}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Destination:</span> {booking.destination}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Start Date:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.packageDuration} Day{booking.packageDuration !== 1 ? 's' : ''}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Participants:</span> {booking.passengerCount ? `${booking.passengerCount} Participant${booking.passengerCount !== 1 ? 's' : ''}` : 'N/A'}
+                              </div>
+                            </div>
+                          )}
+                          {booking.bookingType === 'cruise' && (
+                            <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cruise:</span> {booking.cruiseName}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Company:</span> {booking.cruiseCompany}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Departure Port:</span> {booking.departurePort}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Departure Date:</span> {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : 'N/A'}
+                              </div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Duration:</span> {booking.cruiseDuration} Day{booking.cruiseDuration !== 1 ? 's' : ''}</div>
+                              <div><span className="font-semibold text-gray-700 dark:text-gray-300">Cabin:</span> {booking.cabinClass}</div>
+                              <div>
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Guests:</span> {booking.passengerCount} Guest{booking.passengerCount !== 1 ? 's' : ''}
+                              </div>
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900 dark:text-white">{new Date(booking.createdAt).toLocaleDateString()}</div>
@@ -609,7 +697,7 @@ export default function AdminPage() {
                           <select 
                             className="block w-full py-1 px-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:text-white"
                             value={booking.status}
-                            onChange={(e) => updateBookingStatus(booking.id, e.target.value as BookingStatus)} // Used BookingStatus type
+                            onChange={(e) => updateBookingStatus(booking.id, e.target.value as 'new' | 'contacted' | 'confirmed' | 'cancelled')}
                           >
                             <option value="new">New</option>
                             <option value="contacted">Contacted</option>
