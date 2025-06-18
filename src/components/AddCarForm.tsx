@@ -213,7 +213,7 @@ const AddCarForm: React.FC<AddCarFormProps> = ({ onSuccess, onCancel, credential
 
             <div>
               <label htmlFor="pricePerDay" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Price Per Day (£) *
+                Price Per Day (USD) *
               </label>
               <input
                 type="number"

@@ -972,7 +972,7 @@ export default function AdminPage() {
                             <div className="text-sm text-gray-900 dark:text-white">{car.category}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 dark:text-white">£{typeof car.pricePerDay === 'number' ? car.pricePerDay.toFixed(2) : car.pricePerDay}</div>
+                            <div className="text-sm text-gray-900 dark:text-white">USD ${typeof car.pricePerDay === 'number' ? car.pricePerDay.toFixed(2) : car.pricePerDay}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900 dark:text-white">{car.location}</div>
