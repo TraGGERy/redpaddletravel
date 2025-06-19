@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db';
 import { carHire } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
 export async function GET() {
   try {
@@ -24,7 +25,7 @@ export async function DELETE(request: Request) {
     }
     
     // Delete the car from the database
-    await db.delete(carHire).where({ id: parseInt(id) });
+    await db.delete(carHire).where(eq(carHire.id, parseInt(id)));
     
     return NextResponse.json({ message: 'Car deleted successfully' });
   } catch (error) {

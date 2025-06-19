@@ -5,7 +5,7 @@ import { BookingType } from '@/db/schema';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, phone, carDetails } = body;
+    const { email, phone, name, carDetails } = body;
 
     // Validate required fields
     if (!email || !phone || !carDetails) {
@@ -28,9 +28,10 @@ export async function POST(req: Request) {
     const booking = await createBooking({
       email,
       phone,
+      name,
       bookingType: BookingType.CAR,
       status: 'pending',
-      price: carDetails.price,
+      price: carDetails.price.toString(),
       
       // Car specific fields
       carMake: carDetails.make,

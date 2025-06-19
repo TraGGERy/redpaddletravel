@@ -1,27 +1,92 @@
 'use client';
-
-import Image from "next/image";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { FaCar, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaGasPump, FaCog, FaSpinner, FaCheckCircle } from 'react-icons/fa';
-import ContactModal from '@/components/ContactModal';
-import AutoChangingBackground from '@/components/AutoChangingBackground'; // Added import
+import AutoChangingBackground from '@/components/AutoChangingBackground';
+import BookingModal, { BookingData } from '@/components/BookingModal';
+import { CarHire } from '@/db/schema';
+import CarsClient from './CarsClient';
 
 export default function CarsPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const router = useRouter();
-  const [carDetails, setCarDetails] = useState({
-    make: '',
-    model: '',
-    category: 'Luxury Sedan',
-    pickupLocation: '',
-    dropoffLocation: '',
-    pickupDate: '',
-    dropoffDate: '',
-    price: 0
-  });
+  const [cars, setCars] = useState<CarHire[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCar, setSelectedCar] = useState<CarHire | null>(null);
+
+  // Fetch cars from the database
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/cars`, {
+          cache: 'no-store'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch cars');
+        }
+        
+        const carsData = await response.json();
+        setCars(carsData);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+        setCars([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCars();
+  }, []);
+
+  const handleBookNow = (car: CarHire) => {
+    setSelectedCar(car);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCar(null);
+  };
+
+  const handleBookingSubmit = async (bookingData: BookingData) => {
+    if (!selectedCar) return;
+
+    try {
+      const response = await fetch('/api/bookings/car', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: bookingData.email,
+          phone: bookingData.phone,
+          name: bookingData.fullName,
+          carDetails: {
+            make: selectedCar.make,
+            model: selectedCar.model,
+            category: selectedCar.category,
+            price: parseFloat(selectedCar.pricePerDay.toString()),
+            pickupLocation: selectedCar.location,
+            dropoffLocation: selectedCar.location,
+            pickupDate: bookingData.departureDate,
+            dropoffDate: bookingData.returnDate || bookingData.departureDate,
+          }
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Booking successfully submitted for ${selectedCar.make} ${selectedCar.model}!\nBooking ID: ${result.booking?.id || 'N/A'}\nWe will contact you shortly to confirm your booking.`);
+        handleCloseModal();
+      } else {
+        const error = await response.json();
+        alert(`Failed to submit booking: ${error.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      alert('Failed to submit booking. Please try again.');
+    }
+  };
 
   // Array of background images for auto-changing
   const carImages = [
@@ -30,41 +95,6 @@ export default function CarsPage() {
     "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2070&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop"
   ];
-
-  const handleSearch = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowModal(true);
-    }, 2000);
-  };
-
-  const handleContactSubmit = async (data: { email: string; phone: string }) => {
-    try {
-      const response = await fetch('/api/bookings/car', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          carDetails
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to create booking');
-
-      setShowModal(false);
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        router.push('/');
-      }, 3000);
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to submit booking. Please try again.');
-    }
-  };
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       {/* Hero Section */}
@@ -85,261 +115,78 @@ export default function CarsPage() {
       </section>
       
       {/* Search Form */}
-      <section className="py-10 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 -mt-20 relative z-30">
-            <h2 className="text-2xl font-bold mb-6 text-center">Find Your Perfect Car</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="relative">
-                <label className="block text-sm font-medium mb-2">Pickup Location</label>
-                <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
-                  <FaMapMarkerAlt className="text-gray-400 mr-2" />
-                  <input 
-                    type="text" 
-                    placeholder="City, Airport or Address" 
-                    className="bg-transparent w-full outline-none" 
-                    value={carDetails.pickupLocation}
-                    onChange={(e) => setCarDetails({...carDetails, pickupLocation: e.target.value})}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Car Type</label>
-                <select 
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent"
-                  value={carDetails.category}
-                  onChange={(e) => setCarDetails({...carDetails, category: e.target.value})}
-                >
-                  <option>Luxury Sedan</option>
-                  <option>Sports Car</option>
-                  <option>SUV</option>
-                  <option>Convertible</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">Pickup Date</label>
-                <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
-                  <FaCalendarAlt className="text-gray-400 mr-2" />
-                  <input 
-                    type="date" 
-                    className="bg-transparent w-full outline-none" 
-                    value={carDetails.pickupDate}
-                    onChange={(e) => setCarDetails({...carDetails, pickupDate: e.target.value})}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Pickup Time</label>
-                <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <input type="time" className="bg-transparent w-full outline-none" />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Return Date</label>
-                <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
-                  <FaCalendarAlt className="text-gray-400 mr-2" />
-                  <input 
-                    type="date" 
-                    className="bg-transparent w-full outline-none" 
-                    value={carDetails.dropoffDate}
-                    onChange={(e) => setCarDetails({...carDetails, dropoffDate: e.target.value})}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Drop-off Location</label>
-                <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-3">
-                  <FaMapMarkerAlt className="text-gray-400 mr-2" />
-                  <input 
-                    type="text" 
-                    placeholder="City, Airport or Address" 
-                    className="bg-transparent w-full outline-none" 
-                    value={carDetails.dropoffLocation}
-                    onChange={(e) => setCarDetails({...carDetails, dropoffLocation: e.target.value})}
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <button 
-              onClick={handleSearch}
-              disabled={isLoading}
-              className="mt-6 bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-8 rounded-full font-bold flex items-center justify-center gap-2 w-full md:w-auto md:mx-auto hover:from-green-700 hover:to-green-800 transition shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <>
-                  <FaSpinner className="animate-spin" /> Processing...
-                </>
-              ) : (
-                <>
-                  <FaSearch /> Search Cars
-                </>
-              )}
-            </button>
-
-            <ContactModal
-              isOpen={showModal}
-              onClose={() => setShowModal(false)}
-              onSubmit={handleContactSubmit}
-            />
-
-            {/* Success Message */}
-            {showSuccess && (
-              <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg flex items-center gap-3">
-                  <FaCheckCircle className="text-green-500 text-2xl" />
-                  <p className="text-gray-900 dark:text-white font-medium">Our customer team will contact you shortly!</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      <CarsClient />
       
       {/* Featured Cars */}
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">Our Premium Fleet</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Car 1 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-56 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop"
-                  alt="Mercedes-Benz S-Class"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 text-green-600 px-3 py-1 rounded-full text-sm font-bold">
-                  Luxury
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Mercedes-Benz S-Class</h3>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <FaUserAlt className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">5 Seats</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaGasPump className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Hybrid</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaCog className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Auto</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-2xl font-bold text-green-600">$250</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per day</p>
-                  </div>
-                  <button className="py-2 px-4 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">Hire Now</button>
-                </div>
-              </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <FaSpinner className="animate-spin text-4xl text-green-600 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400 text-lg">Loading our premium fleet...</p>
             </div>
-            
-            {/* Car 2 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-56 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1964&auto=format&fit=crop"
-                  alt="BMW 7 Series"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 text-green-600 px-3 py-1 rounded-full text-sm font-bold">
-                  Luxury
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">BMW 7 Series</h3>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <FaUserAlt className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">5 Seats</span>
+          ) : cars.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {cars.slice(0, 6).map((car) => (
+                  <div key={car.id} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+                    <div className="h-56 overflow-hidden relative">
+                      <Image 
+                        src={car.imageUrl || "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop"}
+                        alt={`${car.make} ${car.model}`}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 text-green-600 px-3 py-1 rounded-full text-sm font-bold">
+                        {car.category}
+                      </div>
                     </div>
-                    <div className="flex items-center">
-                      <FaGasPump className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Hybrid</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaCog className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Auto</span>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold mb-2">{car.make} {car.model}</h3>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center">
+                            <FaUserAlt className="text-gray-400 mr-1" />
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{car.seats} Seats</span>
+                          </div>
+                          <div className="flex items-center">
+                            <FaGasPump className="text-gray-400 mr-1" />
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{car.fuelType}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <FaCog className="text-gray-400 mr-1" />
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{car.transmission}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-2xl font-bold text-green-600">${car.pricePerDay}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">per day</p>
+                        </div>
+                        <button 
+                          onClick={() => handleBookNow(car)}
+                          className="py-2 px-4 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"
+                        >
+                          Book Now
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-2xl font-bold text-green-600">$230</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per day</p>
-                  </div>
-                  <button className="py-2 px-4 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">Hire Now</button>
-                </div>
+                ))}
               </div>
+              
+              <div className="text-center mt-12">
+                <a href="#" className="inline-block py-3 px-8 bg-white dark:bg-gray-700 text-green-600 font-medium rounded-full shadow hover:shadow-lg transition">View All Cars</a>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">No cars available at the moment. Please check back later.</p>
             </div>
-            
-            {/* Car 3 */}
-            <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
-              <div className="h-56 overflow-hidden relative">
-                <Image 
-                  src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=1932&auto=format&fit=crop"
-                  alt="Porsche 911"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 text-green-600 px-3 py-1 rounded-full text-sm font-bold">
-                  Sports
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Porsche 911</h3>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <FaUserAlt className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">2 Seats</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaGasPump className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Petrol</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaCog className="text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Auto</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-2xl font-bold text-green-600">$350</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per day</p>
-                  </div>
-                  <button className="py-2 px-4 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">Hire Now</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <a href="#" className="inline-block py-3 px-8 bg-white dark:bg-gray-700 text-green-600 font-medium rounded-full shadow hover:shadow-lg transition">View All Cars</a>
-          </div>
+          )}
         </div>
       </section>
       
@@ -389,6 +236,19 @@ export default function CarsPage() {
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      {selectedCar && (
+        <BookingModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleBookingSubmit}
+          bookingType="Package"
+          itemName={`${selectedCar.make} ${selectedCar.model}`}
+          itemPrice={parseFloat(selectedCar.pricePerDay.toString())}
+          itemDescription={`${selectedCar.category} • ${selectedCar.seats} Seats • ${selectedCar.fuelType} • ${selectedCar.transmission}`}
+        />
+      )}
     </div>
   );
 }

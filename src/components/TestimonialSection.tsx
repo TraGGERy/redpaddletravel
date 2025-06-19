@@ -13,7 +13,7 @@ const TestimonialSection = () => {
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden relative mr-4">
                 <Image 
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  src="https://randomuser.me/api/portraits/women/65.jpg"
                   alt="Client"
                   fill
                   sizes="48px"
@@ -23,11 +23,11 @@ const TestimonialSection = () => {
                 />
               </div>
               <div>
-                <h4 className="font-bold">James Wilson</h4>
-                <p className="text-gray-500 dark:text-gray-300 text-sm">Business Executive</p>
+                <h4 className="font-bold">Theresa Singano</h4>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">Finance Director</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">&quot;The flight booking service was exceptional. I was able to secure a business class seat at a competitive price, and the entire process was seamless.&quot;</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;I had a fantastic experience with this travel agency. The team has always been professional, attentive, and went above and beyond to tailor the trips to my preferences. Everything from the itinerary to accommodations was perfectly organized, making my travel with my family completely stress free. I highly recommend for anyone looking for a seamless and enjoyable travel experience.&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
@@ -38,7 +38,7 @@ const TestimonialSection = () => {
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden relative mr-4">
                 <Image 
-                  src="https://randomuser.me/api/portraits/women/44.jpg"
+                  src="https://randomuser.me/api/portraits/women/28.jpg"
                   alt="Client"
                   fill
                   sizes="48px"
@@ -48,11 +48,11 @@ const TestimonialSection = () => {
                 />
               </div>
               <div>
-                <h4 className="font-bold">Sophia Martinez</h4>
-                <p className="text-gray-500 dark:text-gray-300 text-sm">Travel Influencer</p>
+                <h4 className="font-bold">Tafadzwa Zifamba</h4>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">Travel Enthusiast</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">&quot;I&apos;ve booked luxury hotels through many platforms, but none compare to the exclusive deals and personalized service I received here.&quot;</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;Absolutely Outstanding Service! I had an incredible experience booking through Redpaddle travel agency. From the first inquiry to the final details of my trip, everything was handled with so much care and professionalism. The team was knowledgeable, patient, and truly went above and beyond to make sure my journey was smooth and enjoyable. What stood out most was the personal touch — they really take the time to understand what you want and tailor the experience perfectly. Many thanks to Kudzai the travel consultant, she was so patient 😊&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
@@ -63,7 +63,7 @@ const TestimonialSection = () => {
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden relative mr-4">
                 <Image 
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
+                  src="https://randomuser.me/api/portraits/men/45.jpg"
                   alt="Client"
                   fill
                   sizes="48px"
@@ -73,11 +73,11 @@ const TestimonialSection = () => {
                 />
               </div>
               <div>
-                <h4 className="font-bold">Robert Chen</h4>
-                <p className="text-gray-500 dark:text-gray-300 text-sm">Entrepreneur</p>
+                <h4 className="font-bold">Michael Thompson</h4>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">Business Owner</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">&quot;The luxury car rental service exceeded my expectations. The vehicle was immaculate, and the delivery to my hotel was right on time.&quot;</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;Redpaddle Travel has consistently delivered exceptional service for both my business and leisure trips. Their attention to detail and commitment to customer satisfaction is unmatched. The team goes the extra mile to ensure every aspect of the journey is perfect. I wouldn't trust my travel arrangements to anyone else!&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
