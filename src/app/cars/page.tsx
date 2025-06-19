@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FaCar, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUserAlt, FaGasPump, FaCog, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+import { FaCar, FaUserAlt, FaGasPump, FaCog, FaSpinner} from 'react-icons/fa';
 import AutoChangingBackground from '@/components/AutoChangingBackground';
 import BookingModal, { BookingData } from '@/components/BookingModal';
 import { CarHire } from '@/db/schema';

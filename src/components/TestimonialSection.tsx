@@ -77,7 +77,7 @@ const TestimonialSection = () => {
                 <p className="text-gray-500 dark:text-gray-300 text-sm">Business Owner</p>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-200 italic">&quot;Redpaddle Travel has consistently delivered exceptional service for both my business and leisure trips. Their attention to detail and commitment to customer satisfaction is unmatched. The team goes the extra mile to ensure every aspect of the journey is perfect. I wouldn't trust my travel arrangements to anyone else!&quot;</p>
+            <p className="text-gray-600 dark:text-gray-200 italic">&quot;Redpaddle Travel has consistently delivered exceptional service for both my business and leisure trips. Their attention to detail and commitment to customer satisfaction is unmatched. The team goes the extra mile to ensure every aspect of the journey is perfect. I wouldn&apos;t trust my travel arrangements to anyone else!&quot;</p>
             <div className="flex mt-4 text-amber-400">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
